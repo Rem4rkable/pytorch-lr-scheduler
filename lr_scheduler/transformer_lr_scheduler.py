@@ -23,7 +23,6 @@
 import math
 import torch
 from typing import Optional
-from torch.optim import Optimizer
 
 from lr_scheduler.lr_scheduler import LearningRateScheduler
 
@@ -33,7 +32,6 @@ class TransformerLRScheduler(LearningRateScheduler):
     Transformer Learning Rate Scheduler proposed in "Attention Is All You Need"
 
     Args:
-        optimizer (Optimizer): Optimizer.
         init_lr (float): Initial learning rate.
         peak_lr (float): Maximum learning rate.
         final_lr (float): Final learning rate.
@@ -43,7 +41,6 @@ class TransformerLRScheduler(LearningRateScheduler):
     """
     def __init__(
             self,
-            optimizer: Optimizer,
             init_lr: float,
             peak_lr: float,
             final_lr: float,
@@ -54,7 +51,7 @@ class TransformerLRScheduler(LearningRateScheduler):
         assert isinstance(warmup_steps, int), "warmup_steps should be inteager type"
         assert isinstance(decay_steps, int), "total_steps should be inteager type"
 
-        super(TransformerLRScheduler, self).__init__(optimizer, init_lr)
+        super(TransformerLRScheduler, self).__init__(init_lr)
         self.final_lr = final_lr
         self.peak_lr = peak_lr
         self.warmup_steps = warmup_steps
@@ -87,7 +84,5 @@ class TransformerLRScheduler(LearningRateScheduler):
             self.lr = self.final_lr
         else:
             raise ValueError("Undefined stage")
-
-        self.set_lr(self.optimizer, self.lr)
 
         return self.lr
